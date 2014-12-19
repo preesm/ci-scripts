@@ -1,0 +1,68 @@
+#!/bin/bash
+
+NBARGS=5
+function print_usage() {
+    echo
+    echo "Usage: $0 <working_directory> <projects_dir> <project> <top_network> <input_sequence> [<reference_file>]"
+    echo "    <working_directory>           Path to folder used to perform build & tests"
+    echo "    <projects_dir>                Folder containing CAL projects"
+    echo "    <project>                     The project containing application to build"
+    echo "    <top_network>                 Qualified name of the top network to build"
+    echo "    <input_sequence>              Input file to pass to application"
+    echo "    <reference_file>              [Optional] Reference file to use for errors checking"
+}
+
+source $(dirname $0)/defines.sh
+
+if [ $# -lt $NBARGS ]; then
+    print_usage
+    exit $E_BADARGS
+fi
+
+[ ! -s "$2" ] && echo "Missing CAL projects folder" && print_usage && exit $E_BADARGS
+[ -z "$3" ] && echo "Missing project name" && print_usage && exit $E_BADARGS
+[ -z "$4" ] && echo "Missing top network qualified name" && print_usage && exit $E_BADARGS
+[ ! -s "$5" ] && echo "Missing input sequence" && print_usage && exit $E_BADARGS
+[ -f "$6" ] && REFOPTION="-r $6"
+
+APPDIR=$2
+PROJECT=$3
+NETWORK=$4
+INPUT=$5
+
+# Split 2 test to perform a "short circuit evaluation"
+[ "$FIFOSIZE" -ge 2 ] 2>/dev/null && SETFIFO="-s $FIFOSIZE" && echo "Fifo size set to $FIFOSIZE"
+
+echo "***START*** $0 $(date -R)"
+
+RUNWORKSPACE=$APPDIR
+rm -fr $RUNWORKSPACE/.metadata $RUNWORKSPACE/.JETEmitters
+rm -fr $RUNWORKSPACE/**/bin
+
+echo "Register Orcc projects in eclipse workspace"
+$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+                        -application net.sf.orcc.cal.workspaceSetup \
+                        -data $RUNWORKSPACE \
+                        $APPDIR
+
+echo "Generate Orcc IR for $PROJECT and projects it depends on"
+$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+                        -application net.sf.orcc.cal.cli \
+                        -data $RUNWORKSPACE \
+                        $PROJECT \
+                        $NETWORK \
+                        -vmargs -Xms40m -Xmx768m
+
+echo "Run simulation"
+$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+                        -application net.sf.orcc.simulators.cli \
+                        -data $RUNWORKSPACE \
+                        -n \
+                        -i $INPUT \
+                        -p $PROJECT \
+                        $SETFIFO \
+                        $REFOPTION \
+                        $NETWORK \
+                        -vmargs -Xms40m -Xmx1024m
+
+echo "***END*** $0 $(date -R)"

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source $(dirname $0)/defines.sh
+
+echo "***START*** $0 $(date -R)"
+
+echo "Run simulation"
+$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+                        -application test.cli.cli
+
+echo "***END*** $0 $(date -R)"

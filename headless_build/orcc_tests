@@ -1,0 +1,58 @@
+#!/bin/bash
+
+NBARGS=2
+function print_usage() {
+    echo
+    echo "Usage: $0 <working_directory> <plugins_dir>"
+    echo "    <working_directory>           Path to folder used to perform build & tests"
+    echo "    <plugins_dir>                 Path to folder containing orcc plugins, in binary format (*.jar)"
+}
+
+source $(dirname $0)/defines.sh
+
+if [ $# -lt $NBARGS ]; then
+    print_usage
+    exit $E_BADARGS
+fi
+
+[ ! -d "$2" ] && echo "Missing plugins directory" && print_usage && exit $E_BADARGS
+
+JARPLUGINSDIR=$(readlink -f $2)
+
+mkdir -p junit-results
+resultsDir=$(readlink -f junit-results)
+
+buildFile=$(mktemp)
+cat > $buildFile <<EOF
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="unit-tests">
+	<target name="unit-tests">
+		<junit haltonfailure="no" printsummary="yes" showoutput="true">
+			<formatter type="xml" />
+			<classpath>
+				<pathelement path="\${java.class.path}/"/>
+				<fileset dir="${ECLIPSEBUILD}/plugins">
+					<include name="org.junit_4*/junit.jar" />
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${JARPLUGINSDIR}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${JGRAPHTPATH}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<batchtest fork="true" todir="${resultsDir}">
+				<fileset dir="$PLUGINSDIR/net.sf.orcc.cal.tests/src">
+					<include name="net/sf/orcc/tests/main/*.java" />
+				</fileset>
+				<fileset dir="$PLUGINSDIR/net.sf.orcc.cal.tests/xtend-gen">
+					<include name="net/sf/orcc/tests/main/*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+</project>
+EOF
+
+ant -f $buildFile

@@ -109,7 +109,7 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog -application org.eclipse.ant.core.
                         -DskipFetch=true \
                         -DtopLevelElementId=$PREESMMAINFEATUREID \
                         -DtopLevelElementType=feature \
-                        -DjavacSource=1.6 -DjavacTarget=1.6 \
+                        -DjavacSource=1.7 -DjavacTarget=1.7 \
                         -DbaseLocation=$ECLIPSEBUILD \
                         -DpluginPath=$ECLIPSEBUILD:$BUILDDIR \
                         -DbuildDirectory=$BUILDDIR \

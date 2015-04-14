@@ -51,24 +51,3 @@ fi
 export P2ADMIN=$DIR/../../p2-admin/org.eclipselabs.equinox.p2.admin.product/target/products/org.eclipse.equinox.p2.admin.rcp.product/linux/gtk/$P2ADMIN_ARCH/p2-admin/p2-admin
 
 export JGRAPHTPATH=$DIR/../lib/jgrapht-0.9.0
-
-# Setup eclipse classpath
-ECLIPSECP=$(echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g")
-# Add the missing junit4 plugin, to allow compiling xtend in tests plugin
-ECLIPSECP=$ECLIPSECP:$(echo $ECLIPSEBUILD/plugins/org.junit_4*/junit.jar)
-
-# Setup Xtext MWE2 classpath
-MWECP=$ECLIPSECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src:$PLUGINSDIR/net.sf.orcc.cal.tests/src
-MWECP=$(echo $DIR/antlr-generator-*.jar | sed -e "s/ /:/g"):$MWECP
-export MWECP
-
-# Setup Xtend classpath
-for i in $(ls $PLUGINSDIR 2>/dev/null)
-do
-    [ -d "$PLUGINSDIR/$i/src" ] && SOURCEFOLDERS=$SOURCEFOLDERS:$PLUGINSDIR/$i/src
-    [ -d "$PLUGINSDIR/$i/src-gen" ] && SOURCEFOLDERS=$SOURCEFOLDERS:$PLUGINSDIR/$i/src-gen
-done
-# Remove the first ':'
-SOURCEFOLDERS=$(echo $SOURCEFOLDERS | sed -e "s/^://g")
-
-export SOURCEFOLDERS

@@ -1,5 +1,5 @@
 #!/bin/bash
-source $(dirname $0)/preesm_defines.sh
+source $(dirname $0)/preesm_defines.sh $1
 
 echo "***START*** $0 $(date -R)"
 

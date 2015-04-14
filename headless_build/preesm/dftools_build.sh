@@ -1,36 +1,36 @@
 #!/bin/bash
 
-NBARGS=3
+NBARGS=2
 function print_usage() {
     echo
-    echo "Usage: $0 <working_directory> <feature_dir> <plugin_dir> [<plugin_dir> <plugin_dir> ...]"
+    echo "Usage: $0 <working_directory> <git_dir> ...]"
     echo "    <working_directory>           Path to folder used to perform build & tests"
-    echo "    <features_dir>                Path to eclipse features folder"
-    echo "    <plugin_dir>                  Path(s) to folder(s) containing eclipse plugins directories"
+    echo "    <git_dir>                     Path to folder containing PREESM, DFTools & Graphiti repositories"
 }
 
-source $(dirname $0)/preesm_defines.sh
+source $(dirname $0)/preesm_defines.sh $1
+source $(dirname $0)/build_defines.sh $2
 
 if [ $# -lt $NBARGS ]; then
     print_usage
     exit $E_BADARGS
 fi
 
-[ ! -d "$2" ] && echo "Missing features directory" && print_usage && exit $E_BADARGS
-[ ! -d "$3" ] && echo "Missing plugins directory" && print_usage && exit $E_BADARGS
-
-SOURCESFEATUREDIR=$2
+[ ! -d "$2" ] && echo "Missing git directory" && print_usage && exit $E_BADARGS
 
 echo "***START*** $(date -R) Build type: $BUILDTYPE"
-#rm -fr $BUILDDIR
 mkdir -p $PLUGINSDIR
 mkdir -p $FEATURESDIR
 
-cp -ur $SOURCESFEATUREDIR/* $FEATURESDIR
+# Copy all the necessary features in the working features dir
+cp -ur $DFTOOLSFEATURESDIR/* $FEATURESDIR
+
+# Copy all the necessary plugins in the working plugins dir
+cp -ur $DFTOOLSPLUGINSDIR/* $PLUGINSDIR
 
 # Remove the 2 first arg from command line
 shift 2
-# Loop over resulting cli arguments
+# Loop over resulting cli arguments and add their content to the working plugins dir
 for arg; do
     cp -ur $arg/* $PLUGINSDIR
 done
@@ -47,11 +47,13 @@ echo ""
 
 xtendoutputdir="xtend-output"
 pushd $PLUGINSDIR
-java -cp $ECLIPSECP:$SOURCEFOLDERS \
+# Generate .java files from .xtend files using the XtendBatchCompiler
+java -cp $ECLIPSECP:$GRAPHITISRCFOLDERS:$DFTOOLSSRCFOLDERS \
     org.eclipse.xtend.core.compiler.batch.Main \
     -useCurrentClassLoader \
     -d ./${xtendoutputdir} \
-    "$SOURCEFOLDERS"
+    "$PREESMSRCFOLDERS"
+
 # Move generated .java files from $xtendoutputdir to where they will be compiled
 
 # For each of the folders containing .xtend files

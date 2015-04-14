@@ -236,7 +236,7 @@ $P2ADMIN -application org.eclipse.equinox.p2.director \
   -artifactRepository file:$LOCALREPO \
   -metadataRepository file:$LOCALREPO \
   -repository $ECLIPSEREPOSITORY \
-  -installIU ${GRAPHITIMAINFEATUREID}.feature.echo
+  -installIU ${GRAPHITIMAINFEATUREID}.feature.group
 
 group ""
 echo "***END*** $0 $(date -R)"

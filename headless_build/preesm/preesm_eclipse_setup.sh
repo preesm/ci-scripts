@@ -34,7 +34,7 @@ rm -rf eclipse
 rm $ECLIPSEARCHIVE
 
 echo "Installing plugins required for build step into eclipse.build"
-BUILDDEPS="org.eclipse.pde.feature.group,org.eclipse.emf.sdk.feature.group,org.eclipse.xtext.sdk.feature.group,org.eclipse.graphiti.sdk.feature.feature.group"
+BUILDDEPS="org.eclipse.pde.feature.group,org.eclipse.emf.sdk.feature.group,org.eclipse.xtext.sdk.feature.group,org.eclipse.graphiti.sdk.feature.feature.group,org.eclipse.cdt.feature.group"
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -application org.eclipse.equinox.p2.director \
                         -destination $ECLIPSEBUILD \

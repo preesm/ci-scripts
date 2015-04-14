@@ -53,14 +53,35 @@ java -cp $ECLIPSECP:$SOURCEFOLDERS \
     -d ./${xtendoutputdir} \
     "$SOURCEFOLDERS"
 
-for xtendfile in $(find -name "*.xtend"); do
-    # The path of the generated java file, under ${xtendoutputdir} folder
-    fromJavaFile=$(echo $xtendfile | sed -e 's/.xtend/.java/g' | sed -e 's/\/src\//%/g' | cut -d'%' -f2)
-    # The path where this java file should be moved before running java compilation
-    toJavaFile=$(echo $xtendfile | sed -e 's/.xtend/.java/g' | sed -e 's/\/src\//\/xtend-gen\//g')
-    mkdir -p $(dirname $toJavaFile)
-    mv ${xtendoutputdir}/$fromJavaFile $toJavaFile
+# Move generated .java files from $xtendoutputdir to where they will be compiled
+
+# For each of the folders containing .xtend files
+for fromDir in $(find . -type f -iname '*.xtend' -printf '%h\n'|sort|uniq); do
+    # Remove the ./ at the beginning of the path
+    fromDir=${fromDir#./}
+    # Get the folder where .java files have been generated from .xtend files contained by $fromDir
+    genDir=$xtendoutputdir/$(echo $fromDir | sed -e 's/\/src\//%/g' | cut -d'%' -f2)
+    # For each .java file found there
+    for fromJavaFile in $(find $genDir -type f -iname '*.java'); do
+        fileName=$(basename $fromJavaFile)
+        toJavaFile=$(echo $fromDir | sed -e 's/\/src\//\/xtend-gen\//g')/$fileName
+        # Move it in the xtend-gen folder next to $fromDir
+        mkdir -p $(dirname $toJavaFile)
+        mv $fromJavaFile $toJavaFile
+    done
 done
+
+# Old version below does not take into account files generated for inner classes and enumerations
+# (there is no .xtend file named as the .java file, the loop does not find them)
+
+# for xtendfile in $(find -name "*.xtend"); do
+#     # The path of the generated java file, under ${xtendoutputdir} folder
+#     fromJavaFile=$(echo $xtendfile | sed -e 's/.xtend/.java/g' | sed -e 's/\/src\//%/g' | cut -d'%' -f2)
+#     # The path where this java file should be moved before running java compilation
+#     toJavaFile=$(echo $xtendfile | sed -e 's/.xtend/.java/g' | sed -e 's/\/src\//\/xtend-gen\//g')
+#     mkdir -p $(dirname $toJavaFile)
+#     mv ${xtendoutputdir}/$fromJavaFile $toJavaFile
+# done
 
 rm -fr $xtendoutputdir
 popd

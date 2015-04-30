@@ -261,5 +261,5 @@ $P2ADMIN -application org.eclipse.equinox.p2.director \
   -repository $ECLIPSEREPOSITORY \
   -installIU ${GRAPHITIMAINFEATUREID}.feature.group
 
-group ""
+echo ""
 echo "***END*** $0 $(date -R)"

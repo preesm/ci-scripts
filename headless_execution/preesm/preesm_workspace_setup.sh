@@ -1,3 +1,4 @@
+#!/bin/bash
 NBARGS=3
 function print_usage() {
     echo

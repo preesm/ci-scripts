@@ -131,7 +131,7 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog -application org.eclipse.ant.core.
                         -DskipFetch=true \
                         -DtopLevelElementId=$DFTOOLSMAINFEATUREID \
                         -DtopLevelElementType=feature \
-                        -DjavacSource=1.7 -DjavacTarget=1.7 \
+                        -DjavacSource=1.8 -DjavacTarget=1.8 \
                         -DbaseLocation=$ECLIPSEBUILD \
                         -DpluginPath=$ECLIPSEBUILD:$BUILDDIR \
                         -DbuildDirectory=$BUILDDIR \

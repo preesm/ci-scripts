@@ -52,7 +52,7 @@ java -cp $ECLIPSECP:$GRAPHITISRCFOLDERS:$DFTOOLSSRCFOLDERS \
     org.eclipse.xtend.core.compiler.batch.Main \
     -useCurrentClassLoader \
     -d ./${xtendoutputdir} \
-    "$PREESMSRCFOLDERS"
+    "$DFTOOLSSRCFOLDERS"
 
 # Move generated .java files from $xtendoutputdir to where they will be compiled
 

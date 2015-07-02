@@ -34,4 +34,4 @@ else
 fi
 
 echo "   Run $WORKFLOWMSG and $SCENARIOMSG"
-$ECLIPSEDIR/eclipse -nosplash -consoleLog -application org.ietr.preesm.cli.workflowCli -data $WORKSPACE $PROJECT $WORKFLOW $SCENARIO
+$ECLIPSEDIR/eclipse -nosplash -consoleLog -application org.ietr.preesm.cli.workflowCli -data $WORKSPACE $PROJECT -w $WORKFLOW -s $SCENARIO

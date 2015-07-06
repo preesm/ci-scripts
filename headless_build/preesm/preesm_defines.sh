@@ -18,7 +18,7 @@ else
 fi
 
 # Used to download the base platform version of eclipse
-export ECLIPSEURL="http://mirror.switch.ch/mirror/eclipse/downloads/drops4/R-4.4.2-201502041700/eclipse-platform-4.4.2-linux-gtk$ECLIPSE_ARCH.tar.gz"
+export ECLIPSEURL="http://mirror.switch.ch/mirror/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-platform-4.5-linux-gtk$ECLIPSE_ARCH.tar.gz"
 
 # Used to download dependencies (both runtime and build eclipse)
 ECLIPSEVERSION=luna

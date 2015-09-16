@@ -1,0 +1,5 @@
+# Match warnings
+warning /\d{2}:\d{2}:\d{2} WARNING:/
+
+# Match errors
+error /\d{2}:\d{2}:\d{2} SEVERE:/

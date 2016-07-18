@@ -19,6 +19,7 @@ PROJECT=$2
 WORKFLOW=$3
 SCENARIO=$4
 
+rm -rf workspace
 mkdir workspace
 
 echo "Register projects in eclipse workspace"

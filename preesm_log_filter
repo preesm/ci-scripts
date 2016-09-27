@@ -1,7 +1,7 @@
 # Match warnings
-warning /\d{2}:\d{2}:\d{2} ([AP]M)? WARNING:/
+warning /\d{1,2}:\d{1,2}:\d{1,2} ([AP]M)? WARNING:/
 
 # Match errors
-error /\d{2}:\d{2}:\d{2} ([AP]M)? SEVERE:/
+error /\d{1,2}:\d{1,2}:\d{1,2} ([AP]M)? SEVERE:/
 error /(?i)erreur 404/
 error /Aucun fichier ou dossier de ce type/

@@ -1,6 +1,6 @@
 ## Note
 
-This project was used before moving the build system to Maven, and is not **deprecated**.
+This project was used before moving the build system for Preesm, Graphiti and DFTools to Maven, and is not **deprecated**.
 
 ## README
 

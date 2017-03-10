@@ -1,3 +1,9 @@
+## Note
+
+This project was used before moving the build system to Maven, and is not **deprecated**.
+
+## README
+
 This project is used to perform automatic builds on the CI server. These scripts can be used with [Graphiti](https://github.com/preesm/graphiti), [DFTools](https://github.com/preesm/graphiti), [Preesm](https://github.com/preesm/preesm), [Preesm-Apps](https://github.com/preesm/preesm-apps)
 
 * headless_build contains the scripts for downloading and installing an eclipse with Preesm and all its dependencies;
